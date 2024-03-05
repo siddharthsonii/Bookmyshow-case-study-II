@@ -1,15 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const routes = require("express").Router();
+require('./configs/mysql_db')
 
-const theatersRouter = require('../src/routes/theaters');
-const datesRouter = require('../src/routes/dates');
-const moviesRouter = require('../src/routes/movies');
-const bookingsRouter = require('../src/routes/bookings');
+// ---- Routes -----
+const moviesRouter = require('./routes/moviesRoutes');
+const showsRouter = require('./routes/showsRoutes');
+const theatersRouter = require('./routes/theatersRoutes');
+const ticketsRouter = require('./routes/ticketsRoutes');
+const usersRouter = require('./routes/usersRoutes');
 
 const app = express();
-
-app.use(routes);
 app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 3000;
@@ -18,11 +18,15 @@ app.get("/", (req, res) => {
   return res.status(200).send("Welcome to Bookmyshow API");
 });
 
-routes.use('/api/theaters', theatersRouter);
-routes.use('/api/dates', datesRouter);
-routes.use('/api/movies', moviesRouter);
-routes.use('/api/bookings', bookingsRouter);
+// Routes
+app.use('/api/users', usersRouter);
+app.use('/api/shows', showsRouter);
 
+app.use('/api/movies', moviesRouter);
+app.use('/api/theaters', theatersRouter);
+app.use('/api/tickets', ticketsRouter);
+
+// Start the server
 app.listen(PORT, (err) => {
   if(!err) {
     console.log(`Server is running on port ${PORT}`);
